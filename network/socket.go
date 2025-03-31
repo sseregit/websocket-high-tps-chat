@@ -1,8 +1,15 @@
 package network
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"net/http"
+	"websocket-high-tps-chat/types"
 )
+
+var upgrader = &websocket.Upgrader{ReadBufferSize: types.SocketBufferSize, WriteBufferSize: types.MessageBufferSize, CheckOrigin: func(r *http.Request) bool {
+	return true
+}}
 
 type message struct {
 	Name    string
@@ -23,4 +30,20 @@ type Client struct {
 	Room   *Room
 	Name   string
 	Socket *websocket.Conn
+}
+
+func NewRoom() *Room {
+	return &Room{
+		Forward: make(chan *message),
+		Join:    make(chan *Client),
+		Leave:   make(chan *Client),
+		Clients: make(map[*Client]bool),
+	}
+}
+
+func (r *Room) SocketServe(c *gin.Context) {
+	socket, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		panic(err)
+	}
 }
