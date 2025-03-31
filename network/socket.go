@@ -41,6 +41,23 @@ func NewRoom() *Room {
 	}
 }
 
+func (r *Room) RunInit() {
+	for {
+		select {
+		case client := <-r.Join:
+			r.clients[client] = true
+		case client := <-r.Leave:
+			r.clients[client] = false
+			delete(r.clients, client)
+			close(client.Send)
+		case msg := <-r.Forward:
+			for client := range r.clients {
+				client.Send <- msg
+			}
+		}
+	}
+}
+
 func (r *Room) SocketServe(c *gin.Context) {
 	socket, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
