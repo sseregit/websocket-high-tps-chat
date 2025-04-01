@@ -23,3 +23,9 @@ class Room {
         }
     }
 }
+
+function newRoom() {
+    return new Room();
+}
+
+module.exports = {newRoom};
