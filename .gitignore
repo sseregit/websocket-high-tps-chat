@@ -7,3 +7,4 @@ go-socket/go.sum
 
 /react/node_modules/
 /js-socket/node_modules/
+/js-socket/logs/socket
