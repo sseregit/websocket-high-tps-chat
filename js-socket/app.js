@@ -10,8 +10,16 @@ const wss = new WebSocket.Server({server});
 const room = newRoom();
 
 wss.on("connection", (ws, req) => {
+
+    const cookie = req.headers.cookie;
+    const [_, user] = cookie.split("=");
+
     ws.on("message", (msg) => {
-        console.log(`msg ${msg}`);
+
+        const jsonMsg = JSON.parse(msg);
+        jsonMsg.name = user;
+
+        room.forwardMessage(jsonMsg);
     });
 
     ws.on("close", () => {
