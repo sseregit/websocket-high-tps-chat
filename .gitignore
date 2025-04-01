@@ -1,8 +1,9 @@
 .idea
 
 *.iml
-go.sum
+go-socket/go.sum
 *.env.json
 .env
 
 /react/node_modules/
+/js-socket/node_modules/
