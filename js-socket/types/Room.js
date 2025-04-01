@@ -3,7 +3,7 @@ const {socketLogger} = require("../logs/winston")
 class Room {
     constructor() {
         this.forward = new Map();
-        this.clients = new Map();
+        this.clients = new Set();
     }
 
     join(client) {

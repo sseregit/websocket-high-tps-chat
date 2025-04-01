@@ -11,19 +11,21 @@ const room = newRoom();
 
 wss.on("connection", (ws, req) => {
 
+    room.join(ws);
+
     const cookie = req.headers.cookie;
     const [_, user] = cookie.split("=");
 
     ws.on("message", (msg) => {
 
         const jsonMsg = JSON.parse(msg);
-        jsonMsg.name = user;
+        jsonMsg.Name = user;
 
         room.forwardMessage(jsonMsg);
     });
 
     ws.on("close", () => {
-        console.log("close");
+        room.leave(ws);
     });
 })
 
