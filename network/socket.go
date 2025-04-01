@@ -49,7 +49,11 @@ func (c *client) Read() {
 		var msg *message
 		err := c.Socket.ReadJSON(&msg)
 		if err != nil {
-			panic(err)
+			if !websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway) {
+				break
+			} else {
+				panic(err)
+			}
 		} else {
 			log.Println("READ : ", msg, "client", c.Name)
 			log.Println()
