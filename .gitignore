@@ -5,3 +5,4 @@ go.sum
 *.env.json
 .env
 
+/react/node_modules/
