@@ -3,6 +3,7 @@ package network
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	"log"
 	"net/http"
 	"time"
 	"websocket-high-tps-chat/types"
@@ -50,6 +51,8 @@ func (c *client) Read() {
 		if err != nil {
 			panic(err)
 		} else {
+			log.Println("READ : ", msg, "client", c.Name)
+			log.Println()
 			msg.Time = time.Now().Unix()
 			msg.Name = c.Name
 
@@ -62,6 +65,8 @@ func (c *client) Write() {
 	defer c.Socket.Close()
 
 	for msg := range c.Send {
+		log.Println("WRITE : ", msg, "client", c.Name)
+		log.Println()
 		err := c.Socket.WriteJSON(msg)
 		if err != nil {
 			panic(err)
